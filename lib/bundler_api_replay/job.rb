@@ -6,6 +6,7 @@ require_relative '../../config/sidekiq'
 
 class BundlerApiReplay::Job
   include Sidekiq::Worker
+  sidekiq_options :retry => false
 
   def perform(path, host, port = 80, timeout = 5)
     logger = Logger.new(STDOUT)
