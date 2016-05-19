@@ -1,4 +1,5 @@
 require 'net/http'
+require 'net/https'
 require 'zlib'
 require 'sidekiq'
 require_relative '../bundler_api_replay'
@@ -11,6 +12,7 @@ class BundlerApiReplay::Job
   def perform(path, host, port = 80, timeout = 5)
     logger = Logger.new(STDOUT)
     http   = Net::HTTP.new(host, port)
+    http.use_ssl = true if port == 443
     http.read_timeout = timeout
     http.request(Net::HTTP::Get.new(path))
   end
